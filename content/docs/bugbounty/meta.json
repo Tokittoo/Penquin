@@ -1,0 +1,13 @@
+
+{
+  "title": "Bug Hunting",
+  "pages": [
+    "index",
+    "subdomain-discovery", 
+    "web-crawling",
+    "vulnerability-scanning",
+    "xss-testing",
+    "sensitive-data",
+    "advanced-techniques"
+  ]
+}

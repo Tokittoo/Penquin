@@ -1,0 +1,67 @@
+
+---
+title: Web Crawling
+description: Discover URLs, endpoints, and web assets
+---
+
+import { CommandBlock } from '@/components/CommandBlock'
+
+# Web Crawling
+
+Comprehensive URL discovery and web asset enumeration techniques.
+
+## URL Discovery
+
+<CommandBlock
+  title="GAU URL Discovery"
+  description="Get all URLs for a domain using multiple sources."
+  command="echo example.com | gau --mc 200 | urldedupe > urls.txt"
+/>
+
+<CommandBlock
+  title="Wayback URLs"
+  description="Extract URLs from Wayback Machine archives."
+  command="waybackurls example.com | sort -u | grep -E '\.(js|php|asp|aspx|jsp)' > wayback_urls.txt"
+/>
+
+## Parameter Discovery
+
+<CommandBlock
+  title="Parameter Extraction"
+  description="Extract URLs with parameters for testing."
+  command="cat urls.txt | grep -E '.php|.asp|.aspx|.jspx|.jsp' | grep '=' | sort > output.txt"
+/>
+
+<CommandBlock
+  title="Final Parameter List"
+  description="Create a clean list of parameterized URLs for testing."
+  command="cat output.txt | sed 's/=.*/=/' > final.txt"
+/>
+
+## Directory Discovery
+
+<CommandBlock
+  title="Gobuster Directory Scan"
+  description="Discover hidden directories and files using Gobuster."
+  command="gobuster dir -u https://example.com -w /usr/share/wordlists/dirb/common.txt -t 50 -x php,txt,html,js"
+/>
+
+<CommandBlock
+  title="FFUF Directory Fuzzing"
+  description="Fast directory and file discovery with FFUF."
+  command="ffuf -u https://example.com/FUZZ -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -c -t 100"
+/>
+
+## JavaScript Analysis
+
+<CommandBlock
+  title="JavaScript File Discovery"
+  description="Find and analyze JavaScript files for endpoints."
+  command="cat urls.txt | grep -E '\.js$' | sort -u | tee js_files.txt"
+/>
+
+<CommandBlock
+  title="Extract Endpoints from JS"
+  description="Extract API endpoints and paths from JavaScript files."
+  command="cat js_files.txt | while read url; do curl -s '$url' | grep -oP '(?<=[\"\\'\\`])/[a-zA-Z0-9_/\\-]*(?=[\"\\'\\`])' | sort -u; done"
+/>

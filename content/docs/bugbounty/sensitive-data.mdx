@@ -1,0 +1,81 @@
+
+---
+title: Sensitive Data Discovery
+description: Techniques for finding exposed sensitive information
+---
+
+import { CommandBlock } from '@/components/CommandBlock'
+
+# Sensitive Data Discovery
+
+Methods and tools for discovering exposed sensitive files and information.
+
+## File Type Discovery
+
+<CommandBlock
+  title="Sensitive File Detection"
+  description="Detects sensitive files on the web server."
+  command="cat allurls.txt | grep -E \"\.xls|\.xml|\.xlsx|\.json|\.pdf|\.sql|\.doc|\.docx|\.pptx|\.txt|\.zip|\.tar\.gz|\.tgz|\.bak|\.7z|\.rar|\.log|\.cache|\.secret|\.db|\.backup|\.yml|\.gz|\.config|\.csv|\.yaml|\.md|\.md5\""
+/>
+
+<CommandBlock
+  title="Backup File Search"
+  description="Search for common backup file patterns."
+  command="cat urls.txt | grep -E \"\.bak$|\.backup$|\.old$|\.orig$|\.save$|\.swp$|~$\""
+/>
+
+## Configuration Files
+
+<CommandBlock
+  title="Config File Discovery"
+  description="Find configuration files that may contain sensitive information."
+  command="gobuster dir -u https://example.com -w /usr/share/seclists/Discovery/Web-Content/web-all.txt -x config,conf,cfg,ini,xml,yaml,yml"
+/>
+
+<CommandBlock
+  title="Environment File Search"
+  description="Search for environment and configuration files."
+  command="ffuf -u https://example.com/FUZZ -w wordlists/env-files.txt -mc 200,403 -c"
+/>
+
+## Database Files
+
+<CommandBlock
+  title="Database File Detection"
+  description="Search for exposed database files and backups."
+  command="cat urls.txt | grep -E \"\.sql$|\.db$|\.sqlite$|\.mdb$|\.dbf$\" | sort -u"
+/>
+
+<CommandBlock
+  title="Database Backup Search"
+  description="Find database backup files with common patterns."
+  command="gobuster dir -u https://example.com -w /usr/share/wordlists/dirb/common.txt -x sql,db,sqlite,bak -t 50"
+/>
+
+## Source Code Exposure
+
+<CommandBlock
+  title="Source Code Discovery"
+  description="Find exposed source code files."
+  command="cat urls.txt | grep -E \"\.php$|\.asp$|\.aspx$|\.jsp$|\.py$|\.rb$|\.pl$|\.sh$\" | sort -u"
+/>
+
+<CommandBlock
+  title="Git Repository Check"
+  description="Check for exposed Git repositories."
+  command="curl -s https://example.com/.git/HEAD | grep ref"
+/>
+
+## API Keys and Secrets
+
+<CommandBlock
+  title="GitHub Dorking for Secrets"
+  description="Search GitHub repositories for exposed API keys."
+  command="python3 gitdorker.py -tf TOKENSFILE -q example.com -d dorks/alldorksv3 -o output"
+/>
+
+<CommandBlock
+  title="TruffleHog Secret Scanning"
+  description="Scan repositories for high entropy strings and secrets."
+  command="trufflehog git https://github.com/example/repo --only-verified"
+/>

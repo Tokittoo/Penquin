@@ -44,7 +44,7 @@ const Footer = () => {
         <div className='flex flex-col gap-2'>
           <div className='flex gap-2 items-center'>
             <Image
-              src={'/logo.jpg'}
+              src={'/Penquin.png'}
               height={30}
               width={30}
               alt='Logo'
